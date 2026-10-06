@@ -24,7 +24,7 @@ const deleteTarget = ref<PaymentMethod | null>(null)
 const filters = ref<Record<string, string>>({})
 
 const filterFields: FilterField[] = [
-  { name: 'name', label: 'Nombre', type: 'text' },
+  { name: 'name', label: 'Nombre', type: 'text', required: true },
   {
     name: 'type',
     label: 'Tipo',
@@ -104,9 +104,7 @@ async function confirmDelete() {
     <Navbar :user-name="auth.user?.name ?? ''" @logout="onLogout" />
 
     <main class="content">
-      <div class="row justify-end q-mb-md">
-        <q-btn color="primary" label="Nuevo método de pago" @click="openCreate" />
-      </div>
+
 
       <FilterForm class="q-mb-md" :fields="filterFields" @search="filters = $event" />
 
@@ -114,20 +112,17 @@ async function confirmDelete() {
         {{ paymentMethods.errorMessage }}
       </q-banner>
 
-      <PaymentMethodsTable
-        :rows="filteredItems"
-        @toggle="paymentMethods.toggleStatus"
-        @edit="openEdit"
-        @remove="deleteTarget = $event"
-      />
+      <div class="row justify-end q-mb-md">
+        <q-btn color="primary" label="Agregar" @click="openCreate" />
+      </div>
+
+      <PaymentMethodsTable :rows="filteredItems" @toggle="paymentMethods.toggleStatus" @edit="openEdit"
+        @remove="deleteTarget = $event" />
     </main>
 
     <PaymentMethodForm v-model:open="formOpen" :payment-method="selected" @save="onSave" />
 
-    <q-dialog
-      :model-value="deleteTarget !== null"
-      @update:model-value="(open) => { if (!open) deleteTarget = null }"
-    >
+    <q-dialog :model-value="deleteTarget !== null" @update:model-value="(open) => { if (!open) deleteTarget = null }">
       <q-card class="confirm-card">
         <q-card-section>
           <div class="text-h6">Eliminar método de pago</div>

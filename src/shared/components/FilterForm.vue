@@ -66,35 +66,52 @@ function onClear() {
 </script>
 
 <template>
-  <q-form ref="formRef" class="q-gutter-md" @submit.prevent="onSearch">
-    <div class="row q-col-gutter-md">
-      <div v-for="field in fields" :key="field.name" class="col-12 col-sm-4">
-        <q-input
-          v-if="field.type === 'text'"
-          v-model="values[field.name]"
-          :label="field.label"
-          outlined
-          dense
-          :rules="rules(field)"
-        />
+  <q-card flat bordered>
+    <q-card-section>
+      <q-form ref="formRef" @submit.prevent="onSearch">
+        <div class="row q-col-gutter-md items-start">
+          <div v-for="field in fields" :key="field.name" class="col-12 col-md">
+            <q-input
+              v-if="field.type === 'text'"
+              v-model="values[field.name]"
+              :label="field.label"
+              outlined
+              dense
+              bottom-slots
+              :rules="rules(field)"
+            />
 
-        <q-select
-          v-else
-          v-model="values[field.name]"
-          :label="field.label"
-          :options="selectOptions(field)"
-          outlined
-          dense
-          emit-value
-          map-options
-          :rules="rules(field)"
-        />
-      </div>
-    </div>
+            <q-select
+              v-else
+              v-model="values[field.name]"
+              :label="field.label"
+              :options="selectOptions(field)"
+              outlined
+              dense
+              bottom-slots
+              emit-value
+              map-options
+              :rules="rules(field)"
+            />
+          </div>
 
-    <div class="row q-gutter-sm">
-      <q-btn label="Buscar" color="primary" type="submit" />
-      <q-btn label="Limpiar" type="button" flat color="primary" @click="onClear" />
-    </div>
-  </q-form>
+          <div class="col-12 col-md-auto">
+            <div class="filter-actions">
+              <q-btn label="Buscar" color="primary" type="submit" unelevated />
+              <q-btn label="Limpiar" type="button" outline color="primary" @click="onClear" />
+            </div>
+          </div>
+        </div>
+      </q-form>
+    </q-card-section>
+  </q-card>
 </template>
+
+<style scoped>
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  height: 40px;
+  align-items: center;
+}
+</style>
