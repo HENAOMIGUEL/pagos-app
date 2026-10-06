@@ -29,29 +29,18 @@ async function onSubmit() {
       </q-card-section>
 
       <q-card-section>
-        <q-form class="q-gutter-md" @submit.prevent="onSubmit">
-          <q-input
-            v-model="loginForm.username"
-            label="Usuario"
-            autocomplete="username"
-            outlined
-            :rules="[(value) => !!value || 'Ingresa tu usuario']"
-          />
+        <q-form class="q-gutter-y-md" @submit.prevent="onSubmit">
+          <q-input v-model="loginForm.username" label="Usuario" autocomplete="username" outlined
+            :rules="[(value) => !!value || 'Ingresa tu usuario']" />
 
-          <q-input
-            v-model="loginForm.password"
-            label="Contraseña"
-            type="password"
-            autocomplete="current-password"
-            outlined
-            :rules="[(value) => !!value || 'Ingresa tu contraseña']"
-          />
+          <q-input v-model="loginForm.password" label="Contraseña" type="password" autocomplete="current-password"
+            outlined :rules="[(value) => !!value || 'Ingresa tu contraseña']" />
 
           <q-banner v-if="auth.errorMessage" class="bg-red-1 text-negative" rounded>
             {{ auth.errorMessage }}
           </q-banner>
 
-          <q-btn class="full-width" color="primary" label="Entrar" type="submit" />
+          <q-btn class="full-width" color="primary" label="Entrar" type="submit" unelevated />
         </q-form>
       </q-card-section>
     </q-card>
