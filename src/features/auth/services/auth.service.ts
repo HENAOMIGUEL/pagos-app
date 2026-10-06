@@ -16,7 +16,6 @@ export const authService = {
       if (axios.isAxiosError(error)) {
         throw new Error('No se pudo conectar con el servidor')
       }
-
       throw error
     }
 

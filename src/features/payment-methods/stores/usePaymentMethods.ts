@@ -23,5 +23,25 @@ export const usePaymentMethods = defineStore('payment-methods', () => {
     }
   }
 
-  return { items, loading, errorMessage, load }
+  async function toggleStatus(paymentMethod: PaymentMethod) {
+    const item = items.value.find((row) => row.id === paymentMethod.id)
+
+    if (!item) {
+      return
+    }
+
+    const previous = item.status
+    item.status = previous === 'active' ? 'inactive' : 'active'
+    errorMessage.value = ''
+
+    try {
+      await paymentMethodsService.updateStatus(item.id, item.status)
+    } catch (error) {
+      item.status = previous
+      errorMessage.value =
+        error instanceof Error ? error.message : 'No se pudo actualizar el método de pago'
+    }
+  }
+
+  return { items, loading, errorMessage, load, toggleStatus }
 })

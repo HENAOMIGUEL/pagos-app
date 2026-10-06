@@ -16,4 +16,16 @@ export const paymentMethodsService = {
       throw error
     }
   },
+
+  async updateStatus(id: number | string, status: string): Promise<void> {
+    try {
+      await api.patch(`/paymentMethods/${id}`, { status })
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error('No se pudo actualizar el método de pago')
+      }
+
+      throw error
+    }
+  },
 }

@@ -30,7 +30,11 @@ function onLogout() {
         {{ paymentMethods.errorMessage }}
       </q-banner>
 
-      <PaymentMethodsTable :rows="paymentMethods.items" :loading="paymentMethods.loading" />
+      <PaymentMethodsTable
+        :rows="paymentMethods.items"
+        :loading="paymentMethods.loading"
+        @toggle="paymentMethods.toggleStatus"
+      />
     </main>
   </div>
 </template>

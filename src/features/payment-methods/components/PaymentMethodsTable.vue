@@ -8,17 +8,15 @@ defineProps<{
   loading: boolean
 }>()
 
+const emit = defineEmits<{
+  toggle: [paymentMethod: PaymentMethod]
+}>()
+
 const columns: QTableProps['columns'] = [
   { name: 'name', label: 'Nombre', field: 'name', align: 'left' },
   { name: 'type', label: 'Tipo', field: 'type', align: 'left' },
   { name: 'description', label: 'Descripción', field: 'description', align: 'left' },
-  {
-    name: 'status',
-    label: 'Estado',
-    field: 'status',
-    align: 'left',
-    format: (value: string) => (value === 'active' ? 'Activo' : 'Inactivo'),
-  },
+  { name: 'status', label: 'Estado', field: 'status', align: 'left' },
   {
     name: 'createdAt',
     label: 'Fecha',
@@ -51,5 +49,16 @@ function formatDate(value: string) {
     flat
     bordered
     no-data-label="No hay métodos de pago"
-  />
+  >
+    <template #body-cell-status="props">
+      <q-td :props="props">
+        <q-toggle
+          :model-value="props.row.status === 'active'"
+          :label="props.row.status === 'active' ? 'Activo' : 'Inactivo'"
+          color="primary"
+          @update:model-value="emit('toggle', props.row)"
+        />
+      </q-td>
+    </template>
+  </q-table>
 </template>
