@@ -1,15 +1,31 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const form = reactive({
+import { useAuth } from '@/features/auth/stores/useAuth'
+
+const auth = useAuth()
+const router = useRouter()
+
+const loginForm = reactive({
   username: '',
   password: '',
 })
 
-function onSubmit() {
-  return {
-    username: form.username,
-    password: form.password,
+const loading = ref(false)
+const errorMessage = ref('')
+
+async function onSubmit() {
+  loading.value = true
+  errorMessage.value = ''
+
+  try {
+    await auth.login(loginForm)
+    await router.push({ name: 'payment-methods' })
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'No se pudo iniciar sesión'
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -24,7 +40,7 @@ function onSubmit() {
       <q-card-section>
         <q-form class="q-gutter-md" @submit.prevent="onSubmit">
           <q-input
-            v-model="form.username"
+            v-model="loginForm.username"
             label="Usuario"
             autocomplete="username"
             outlined
@@ -32,7 +48,7 @@ function onSubmit() {
           />
 
           <q-input
-            v-model="form.password"
+            v-model="loginForm.password"
             label="Contraseña"
             type="password"
             autocomplete="current-password"
@@ -40,7 +56,17 @@ function onSubmit() {
             :rules="[(value) => !!value || 'Ingresa tu contraseña']"
           />
 
-          <q-btn class="full-width" color="primary" label="Entrar" type="submit" />
+          <q-banner v-if="errorMessage" class="bg-red-1 text-negative" rounded>
+            {{ errorMessage }}
+          </q-banner>
+
+          <q-btn
+            class="full-width"
+            color="primary"
+            label="Entrar"
+            type="submit"
+            :loading="loading"
+          />
         </q-form>
       </q-card-section>
     </q-card>

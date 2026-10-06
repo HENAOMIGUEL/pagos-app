@@ -1,18 +1,17 @@
 import type { NavigationGuard } from 'vue-router'
 
-export const AUTH_STORAGE_KEY = 'auth-user'
-
-export function isAuthenticated(): boolean {
-  return localStorage.getItem(AUTH_STORAGE_KEY) !== null
-}
+import { useAuth } from '@/features/auth/stores/useAuth'
 
 export const authGuard: NavigationGuard = (to) => {
-  if (!to.meta.requiresAuth || isAuthenticated()) {
+  const auth = useAuth()
+
+  if (to.name === 'login' && auth.isAuthenticated) {
+    return { name: 'payment-methods' }
+  }
+
+  if (!to.meta.requiresAuth || auth.isAuthenticated) {
     return true
   }
 
-  return {
-    name: 'login',
-    query: { redirect: to.fullPath },
-  }
+  return { name: 'login' }
 }
