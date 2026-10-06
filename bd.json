@@ -21,7 +21,7 @@
       "name": "Visa",
       "type": "Tarjeta de crédito",
       "description": "Tarjeta Visa terminada en 4242",
-      "status": "active",
+      "status": "inactive",
       "createdAt": "2026-09-15T10:30:00"
     },
     {
@@ -29,7 +29,7 @@
       "name": "Mastercard",
       "type": "Tarjeta de crédito",
       "description": "Tarjeta Mastercard terminada en 5555",
-      "status": "active",
+      "status": "inactive",
       "createdAt": "2026-09-18T14:20:00"
     },
     {

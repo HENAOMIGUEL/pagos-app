@@ -10,13 +10,22 @@ export const useAuth = defineStore('auth', () => {
   
   const user = ref<SessionUser | null>(readStoredUser())
   const isAuthenticated = computed(() => user.value !== null)
+  const errorMessage = ref('')
 
   async function login(credentials: LoginCredentials) {
-    const authUser = await authService.login(credentials)
-    const { password, ...sessionUser } = authUser
+    errorMessage.value = ''
 
-    user.value = sessionUser
-    localStorage.setItem('auth-user', JSON.stringify(sessionUser))
+    try {
+      const authUser = await authService.login(credentials)
+      const { password, ...sessionUser } = authUser
+
+      user.value = sessionUser
+      localStorage.setItem('auth-user', JSON.stringify(sessionUser))
+      return true
+    } catch (error) {
+      errorMessage.value = error instanceof Error ? error.message : 'No se pudo iniciar sesión'
+      return false
+    }
   }
 
   function logout() {
@@ -24,7 +33,7 @@ export const useAuth = defineStore('auth', () => {
     localStorage.removeItem('auth-user')
   }
 
-  return { user, isAuthenticated, login, logout }
+  return { user, isAuthenticated, errorMessage, login, logout }
 })
 
 function readStoredUser(): SessionUser | null {

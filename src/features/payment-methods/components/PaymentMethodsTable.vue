@@ -5,11 +5,12 @@ import type { PaymentMethod } from '@/features/payment-methods/types/payment-met
 
 defineProps<{
   rows: PaymentMethod[]
-  loading: boolean
 }>()
 
 const emit = defineEmits<{
   toggle: [paymentMethod: PaymentMethod]
+  edit: [paymentMethod: PaymentMethod]
+  remove: [paymentMethod: PaymentMethod]
 }>()
 
 const columns: QTableProps['columns'] = [
@@ -24,6 +25,7 @@ const columns: QTableProps['columns'] = [
     align: 'left',
     format: (value: string) => formatDate(value),
   },
+  { name: 'actions', label: 'Acciones', field: 'id', align: 'right' },
 ]
 
 function formatDate(value: string) {
@@ -44,7 +46,6 @@ function formatDate(value: string) {
   <q-table
     :rows="rows"
     :columns="columns"
-    :loading="loading"
     row-key="id"
     flat
     bordered
@@ -57,6 +58,28 @@ function formatDate(value: string) {
           :label="props.row.status === 'active' ? 'Activo' : 'Inactivo'"
           color="primary"
           @update:model-value="emit('toggle', props.row)"
+        />
+      </q-td>
+    </template>
+
+    <template #body-cell-actions="props">
+      <q-td :props="props">
+        <q-btn
+          flat
+          round
+          dense
+          icon="edit"
+          aria-label="Editar"
+          @click="emit('edit', props.row)"
+        />
+        <q-btn
+          flat
+          round
+          dense
+          icon="delete"
+          color="negative"
+          aria-label="Eliminar"
+          @click="emit('remove', props.row)"
         />
       </q-td>
     </template>

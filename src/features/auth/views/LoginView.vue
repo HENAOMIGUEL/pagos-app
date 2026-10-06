@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAuth } from '@/features/auth/stores/useAuth'
@@ -12,20 +12,11 @@ const loginForm = reactive({
   password: '',
 })
 
-const loading = ref(false)
-const errorMessage = ref('')
-
 async function onSubmit() {
-  loading.value = true
-  errorMessage.value = ''
+  const loggedIn = await auth.login(loginForm)
 
-  try {
-    await auth.login(loginForm)
+  if (loggedIn) {
     await router.push({ name: 'payment-methods' })
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'No se pudo iniciar sesión'
-  } finally {
-    loading.value = false
   }
 }
 </script>
@@ -56,17 +47,11 @@ async function onSubmit() {
             :rules="[(value) => !!value || 'Ingresa tu contraseña']"
           />
 
-          <q-banner v-if="errorMessage" class="bg-red-1 text-negative" rounded>
-            {{ errorMessage }}
+          <q-banner v-if="auth.errorMessage" class="bg-red-1 text-negative" rounded>
+            {{ auth.errorMessage }}
           </q-banner>
 
-          <q-btn
-            class="full-width"
-            color="primary"
-            label="Entrar"
-            type="submit"
-            :loading="loading"
-          />
+          <q-btn class="full-width" color="primary" label="Entrar" type="submit" />
         </q-form>
       </q-card-section>
     </q-card>
