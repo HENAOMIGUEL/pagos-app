@@ -36,23 +36,18 @@ npm run dev
 - `/login`: inicio de sesión
 - `/metodos-de-pago`: solo con sesión iniciada
 
-## Supuestos del modelo
+## Estructura de datos
 
-Los datos viven en `bd.json`. json-server devuelve los `id` como texto.
+Los datos están en `bd.json`. json-server devuelve los `id` como texto.
 
-**Usuario** (`AuthUser`): `id`, `username`, `password`, `name` y `role`. El formulario de login solo envía `username` y `password`. Al guardar la sesión en `localStorage` se omite `password`. No hay token.
+**Usuario:** `id`, `username`, `password`, `name`, `role`. El login envía usuario y contraseña. La sesión guarda al usuario en `localStorage`, sin `password` y sin token.
 
-**Método de pago** (`PaymentMethod`): `id`, `name`, `type`, `description`, `status` y `createdAt`.
-
-- `name`, `type` y `description` son texto. `description` puede ir vacío.
-- `type` es uno de: Tarjeta de crédito, Tarjeta débito, Cuenta bancaria, Billetera digital.
-- `status` es `active` o `inactive`. En pantalla se muestra como Activo o Inactivo.
-- `createdAt` es una fecha en ISO. Un registro nuevo nace con `status: active` y la fecha del momento.
+**Método de pago:** `id`, `name`, `type`, `description` (opcional), `status` y `createdAt`. `type` es Tarjeta de crédito, Tarjeta débito, Cuenta bancaria o Billetera digital. `status` es `active` o `inactive` (en pantalla, Activo o Inactivo). `createdAt` va en ISO. Un registro nuevo nace activo, con la fecha del momento.
 
 ## Arquitectura y dependencias
 
-Las vistas no llaman a la API. Cada store hace la llamada a través de su servicio (`auth.service.ts`, `payment-methods.service.ts`) y actualiza el estado. Si la operación falla, el store guarda `errorMessage` y la vista solo lo muestra.
+No hay backend real, pero se mockea la data en `bd.json` para simular API real y json-server la publica en `http://localhost:3000`.
 
-`bd.json` es la única fuente de datos simulados. No hay backend propio.
+El flujo es: componente=> store => servicio. La vista no llama a la API. El store usa `auth.service.ts` o `payment-methods.service.ts`, recibe la respuesta y actualiza el estado.
 
-Axios es el cliente HTTP, el mismo que se usaría contra una API real. json-server publica `bd.json` en `http://localhost:3000` para no mockear las respuestas dentro de los componentes. Quasar cubre la interfaz, la validación visual y los avisos. Pinia cubre el estado. No se agregaron librerías extra para UI, validación o estado.
+Axios es el cliente HTTP. Quasar para la UI. Pinia para el estado. Aparte de Vue, Quasar y Pinia solo se agregaron Axios y json-server.
