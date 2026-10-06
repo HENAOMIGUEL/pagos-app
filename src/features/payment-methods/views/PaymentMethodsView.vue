@@ -24,7 +24,7 @@ const deleteTarget = ref<PaymentMethod | null>(null)
 const filters = ref<Record<string, string>>({})
 
 const filterFields: FilterField[] = [
-  { name: 'name', label: 'Nombre', type: 'text', required: true },
+  { name: 'name', label: 'Nombre', type: 'text' },
   {
     name: 'type',
     label: 'Tipo',
@@ -41,6 +41,8 @@ const filterFields: FilterField[] = [
     ],
   },
 ]
+
+const isAdmin = computed(() => auth.user?.role === 'admin')
 
 const filteredItems = computed(() =>
   paymentMethods.items.filter((item) =>
@@ -112,12 +114,17 @@ async function confirmDelete() {
         {{ paymentMethods.errorMessage }}
       </q-banner>
 
-      <div class="row justify-end q-mb-md">
+      <div v-if="isAdmin" class="row justify-end q-mb-md">
         <q-btn color="primary" label="Agregar" @click="openCreate" />
       </div>
 
-      <PaymentMethodsTable :rows="filteredItems" @toggle="paymentMethods.toggleStatus" @edit="openEdit"
-        @remove="deleteTarget = $event" />
+      <PaymentMethodsTable
+        :rows="filteredItems"
+        :is-admin="isAdmin"
+        @toggle="paymentMethods.toggleStatus"
+        @edit="openEdit"
+        @remove="deleteTarget = $event"
+      />
     </main>
 
     <PaymentMethodForm v-model:open="formOpen" :payment-method="selected" @save="onSave" />

@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { QTableProps } from 'quasar'
 
 import type { PaymentMethod } from '@/features/payment-methods/types/payment-method'
 
-defineProps<{
+const props = defineProps<{
   rows: PaymentMethod[]
+  isAdmin: boolean
 }>()
 
 const emit = defineEmits<{
@@ -13,20 +15,27 @@ const emit = defineEmits<{
   remove: [paymentMethod: PaymentMethod]
 }>()
 
-const columns: QTableProps['columns'] = [
-  { name: 'name', label: 'Nombre', field: 'name', align: 'left' },
-  { name: 'type', label: 'Tipo', field: 'type', align: 'left' },
-  { name: 'description', label: 'Descripción', field: 'description', align: 'left' },
-  { name: 'status', label: 'Estado', field: 'status', align: 'left' },
-  {
-    name: 'createdAt',
-    label: 'Fecha',
-    field: 'createdAt',
-    align: 'left',
-    format: (value: string) => formatDate(value),
-  },
-  { name: 'actions', label: 'Acciones', field: 'id', align: 'right' },
-]
+const columns = computed(() => {
+  const base: QTableProps['columns'] = [
+    { name: 'name', label: 'Nombre', field: 'name', align: 'left' },
+    { name: 'type', label: 'Tipo', field: 'type', align: 'left' },
+    { name: 'description', label: 'Descripción', field: 'description', align: 'left' },
+    { name: 'status', label: 'Estado', field: 'status', align: 'left' },
+    {
+      name: 'createdAt',
+      label: 'Fecha',
+      field: 'createdAt',
+      align: 'left',
+      format: (value: string) => formatDate(value),
+    },
+  ]
+
+  if (props.isAdmin) {
+    base.push({ name: 'actions', label: 'Acciones', field: 'id', align: 'right' })
+  }
+
+  return base
+})
 
 function formatDate(value: string) {
   const date = new Date(value)
@@ -54,11 +63,13 @@ function formatDate(value: string) {
     <template #body-cell-status="props">
       <q-td :props="props">
         <q-toggle
+          v-if="isAdmin"
           :model-value="props.row.status === 'active'"
           :label="props.row.status === 'active' ? 'Activo' : 'Inactivo'"
           color="primary"
           @update:model-value="emit('toggle', props.row)"
         />
+        <span v-else>{{ props.row.status === 'active' ? 'Activo' : 'Inactivo' }}</span>
       </q-td>
     </template>
 
