@@ -70,7 +70,7 @@ describe('usePaymentMethods', () => {
     expect(paymentMethodsService.updateStatus).toHaveBeenCalledWith('1', 'inactive')
   })
 
-  it('recupera el estado anterior si el cambio falla', async () => {
+  it('deja el estado igual si el cambio falla', async () => {
     const visa = method({ status: 'active' })
     vi.mocked(paymentMethodsService.getAll).mockResolvedValue([visa])
     vi.mocked(paymentMethodsService.updateStatus).mockRejectedValue(

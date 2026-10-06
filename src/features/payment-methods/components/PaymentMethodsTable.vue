@@ -96,3 +96,10 @@ function formatDate(value: string) {
     </template>
   </q-table>
 </template>
+
+<style scoped>
+:deep(.q-table thead th) {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+</style>

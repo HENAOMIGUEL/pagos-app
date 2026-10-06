@@ -77,7 +77,6 @@ function onClear() {
               :label="field.label"
               outlined
               dense
-              bottom-slots
               :rules="rules(field)"
             />
 
@@ -88,7 +87,6 @@ function onClear() {
               :options="selectOptions(field)"
               outlined
               dense
-              bottom-slots
               emit-value
               map-options
               :rules="rules(field)"
@@ -111,7 +109,6 @@ function onClear() {
 .filter-actions {
   display: flex;
   gap: 8px;
-  height: 40px;
   align-items: center;
 }
 </style>

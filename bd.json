@@ -21,7 +21,7 @@
       "name": "Visa",
       "type": "Tarjeta de crédito",
       "description": "Tarjeta Visa terminada en 4242",
-      "status": "inactive",
+      "status": "active",
       "createdAt": "2026-09-15T10:30:00"
     },
     {
@@ -29,7 +29,7 @@
       "name": "Mastercard",
       "type": "Tarjeta de crédito",
       "description": "Tarjeta Mastercard terminada en 5555",
-      "status": "active",
+      "status": "inactive",
       "createdAt": "2026-09-18T14:20:00"
     },
     {
@@ -37,7 +37,7 @@
       "name": "Cuenta Bancaria",
       "type": "Cuenta bancaria",
       "description": "Cuenta bancaria terminada en 7890",
-      "status": "inactive",
+      "status": "active",
       "createdAt": "2026-09-20T09:15:00"
     },
     {
@@ -45,7 +45,7 @@
       "name": "American Express",
       "type": "Tarjeta de crédito",
       "description": "Tarjeta American Express terminada en 1005",
-      "status": "active",
+      "status": "inactive",
       "createdAt": "2026-09-22T16:45:00"
     },
     {

@@ -30,14 +30,13 @@ export const usePaymentMethods = defineStore('payment-methods', () => {
       return
     }
 
-    const previous = item.status
-    item.status = previous === 'active' ? 'inactive' : 'active'
+    const nextStatus = item.status === 'active' ? 'inactive' : 'active'
     errorMessage.value = ''
 
     try {
-      await paymentMethodsService.updateStatus(item.id, item.status)
+      await paymentMethodsService.updateStatus(item.id, nextStatus)
+      item.status = nextStatus
     } catch (error) {
-      item.status = previous
       errorMessage.value =
         error instanceof Error ? error.message : 'No se pudo actualizar el método de pago'
     }
